@@ -1,5 +1,3 @@
-# dot-mobile
-
 Touch controls for first-person Godot 4 games: a drawn virtual stick, drag-to-look, game-declared buttons, optional gyro look on the web, and server-controlled aim assist and auto-fire.
 
 - Drives dot-player-controller's `DotFpsTouchSampler`; the game keeps its own input pipeline.
