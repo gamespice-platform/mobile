@@ -1,26 +1,13 @@
 class_name DotMobileControls
 extends DotHudPiece
 
-## The touch overlay a first-person game adds over its HUD: a drawn stick, drag-to-look, the game's declared
-## buttons, gyro look, aim assist and auto-fire, each bounded by [member rules]. It drives the game's own
-## [DotFpsTouchSampler] (forwarding touches, holding command bits) and replaces nothing in it.
-##
-## [codeblock]
-## var controls := DotMobileControls.new()
-## controls.rules = my_rules            # followed from the server's replicated cvars
-## controls.setup(sampler, [{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0},
-##     {"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": DotFpsCommand.BUTTON_JUMP}])
-## controls.crosshair_fn = my_crosshair_kind   # () -> DotMobileAutoFire.TARGET_*
-## hud.add_child(controls)
-## # and in the game's own input forwarding:
-## if not controls.takes(event): sampler.handle_event(event)
-## [/codeblock]
+## The touch overlay a first-person game adds over its HUD: a drawn stick, drag-to-look, the game's declared buttons, gyro look, aim assist and auto-fire, each bounded by [member rules]. It drives the game's own [DotFpsTouchSampler] (forwarding touches, holding command bits) and replaces nothing in it.
+## Wiring: [code]var controls := DotMobileControls.new()[/code]; [code]controls.rules = my_rules[/code] (followed from the server's replicated cvars); [code]controls.setup(sampler, [{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0}, {"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": DotFpsCommand.BUTTON_JUMP}])[/code];
+## [code]controls.crosshair_fn = my_crosshair_kind[/code] (() -> DotMobileAutoFire.TARGET_*); [code]hud.add_child(controls)[/code]; and in the game's own input forwarding, [code]if not controls.takes(event): sampler.handle_event(event)[/code].
 
 ## A declared button went down or up (after the server's filter). One-shot actions hang off these.
 signal button_pressed(id: StringName)
 signal button_released(id: StringName)
-
-const CHANNEL := "mobile"
 
 ## The id auto-fire presses. Declare a button with this id for a visible Fire button.
 const FIRE := &"fire"

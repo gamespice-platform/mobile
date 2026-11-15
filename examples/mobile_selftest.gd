@@ -2,10 +2,7 @@ extends Node
 
 ## Exercises dot-mobile with no phone, no browser and no server: the rules' clamping and cvars, the prefs a player
 ## saves, aim-assist math, auto-fire gating and the overlay driving a real DotFpsTouchSampler with synthetic touches.
-##
-## [codeblock]
-## godot --headless --path . res://examples/mobile_selftest.tscn
-## [/codeblock]
+## Run: [code]godot --headless --path . res://examples/mobile_selftest.tscn[/code].
 
 ## A script error aborts one section, not the run; the totals catch that.
 const SECTIONS := 9
