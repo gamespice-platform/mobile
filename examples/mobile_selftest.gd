@@ -328,6 +328,23 @@ func _test_controls() -> void:
 	kind[0] = DotMobileAutoFire.TARGET_FRIEND
 	await get_tree().process_frame
 	_check(not c.is_held(&"fire"), "and lets go on a teammate")
+	sampler = await _controls_pause_and_swap(c, sampler, tun, layout, kind, w, h)
+	rules.schemes = DotMobileRules.SCHEME_DRAG
+	await get_tree().process_frame
+	c._input(_touch(4, Vector2(w * 0.2, h * 0.5), true))
+	_check(int(sampler.describe()["move_finger"]) == -1, "a disallowed stick takes no finger")
+	rules.buttons = PackedStringArray(["fire"])
+	await get_tree().process_frame
+	_check(c.buttons.radius_of(&"jump") <= 0.0 and c.buttons.radius_of(&"fire") > 0.0, "the server hides buttons")
+	rules.touch_enabled = false
+	await get_tree().process_frame
+	_check(not c.touch and not c.visible, "the server can switch the overlay off live")
+	c.queue_free()
+	await get_tree().process_frame
+
+
+## Pausing hides the overlay and lifts its fingers; a new sampler takes over and the old one gets its own filter back. Returns the new sampler.
+func _controls_pause_and_swap(c: DotMobileControls, sampler: DotFpsTouchSampler, tun: DotFpsTunables, layout: Array[Dictionary], kind: Array[int], w: float, h: float) -> DotFpsTouchSampler:
 	c._input(_touch(6, Vector2(w * 0.2, h * 0.5), true))
 	c.paused = true
 	_check(not c.visible and int(sampler.describe()["move_finger"]) == -1, "pausing hides it and lifts its fingers")
@@ -345,19 +362,7 @@ func _test_controls() -> void:
 	sampler.handle_event(_touch(9, Vector2(w * 0.2, h * 0.5), true))
 	_check(int(sampler.describe()["move_finger"]) == 9, "and the old one gets its own filter back")
 	sampler.handle_event(_touch(9, Vector2(w * 0.2, h * 0.5), false))
-	sampler = other
-	rules.schemes = DotMobileRules.SCHEME_DRAG
-	await get_tree().process_frame
-	c._input(_touch(4, Vector2(w * 0.2, h * 0.5), true))
-	_check(int(sampler.describe()["move_finger"]) == -1, "a disallowed stick takes no finger")
-	rules.buttons = PackedStringArray(["fire"])
-	await get_tree().process_frame
-	_check(c.buttons.radius_of(&"jump") <= 0.0 and c.buttons.radius_of(&"fire") > 0.0, "the server hides buttons")
-	rules.touch_enabled = false
-	await get_tree().process_frame
-	_check(not c.touch and not c.visible, "the server can switch the overlay off live")
-	c.queue_free()
-	await get_tree().process_frame
+	return other
 
 
 func _test_left_handed() -> void:
