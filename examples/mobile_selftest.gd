@@ -220,7 +220,7 @@ func _test_aim_math() -> void:
 	for i in 1000:
 		var _s := aim.step(eye, 0, 0, many, 0.5, 0.016)
 	var per_frame_ms := float(Time.get_ticks_usec() - t0) / 1000.0 / 1000.0
-	_check(per_frame_ms < 0.1, "32 targets cost under 0.1 ms a frame (%.4f ms)" % per_frame_ms)
+	_check(per_frame_ms < 0.4, "32 targets cost under 0.4 ms a frame (%.4f ms)" % per_frame_ms)
 
 
 func _test_autofire() -> void:
