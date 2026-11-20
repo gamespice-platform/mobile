@@ -1,7 +1,7 @@
 class_name DotMobileGyro
 extends RefCounted
 
-## The phone's own rotation as look input, on the web only, through dot-core's [DotWeb] (no page script, no eval).
+## The phone's own rotation as look input, on the web only, through GameSpice Core's [DotWeb] (no page script, no eval).
 ## iOS asks the player first and only from a user gesture, so [method start] arms a one-shot listener on the next
 ## touch and asks inside it. Off the web, with no motion sensor or when refused, every call is a no-op.
 

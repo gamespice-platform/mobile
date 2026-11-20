@@ -1,4 +1,4 @@
-# dot-mobile
+# GameSpice Mobile
 
 Touch controls for a first-person game: a drawn stick, drag-to-look, the game's declared buttons, optional gyro look, and opt-in aim assist and auto-fire, each bounded by replicated server cvars. It drives the game's own `DotFpsTouchSampler`; it replaces nothing in it.
 
@@ -21,7 +21,7 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is sp
 | `core/dot_mobile_aim_assist.gd` | `DotMobileAimAssist`: cone pick and a capped turn towards it, in the sampler's degrees |
 | `core/dot_mobile_autofire.gd` | `DotMobileAutoFire`: when the fire button is down; `ray_target` for a game with no crosshair query |
 | `runtime/dot_mobile_gyro.gd` | `DotMobileGyro`: DeviceMotion through `DotWeb`, iOS permission from a gesture |
-| `runtime/dot_mobile_buttons.gd` | `DotMobileButtons`: dot-ui's `DotTouchButtons`, mirrorable |
+| `runtime/dot_mobile_buttons.gd` | `DotMobileButtons`: GameSpice UI's `DotTouchButtons`, mirrorable |
 | `runtime/dot_mobile_controls.gd` | `DotMobileControls`: the node a game adds |
 | `examples/mobile_selftest.tscn` | the suite |
 

@@ -1,12 +1,12 @@
-# dot-mobile design
+# GameSpice Mobile design
 
 ## What it is
 
 `DotMobileControls` is one `Control` a first-person game adds over its HUD. It shows on a touch device (`DotPlatform.has_touch()`, or the player's override) when the server allows it, and then:
 
 - forwards each touch to the game's `DotFpsTouchSampler`: left half moves (a stick planted where the thumb lands), right half looks;
-- draws the stick (and a faint resting stick before the first touch) from dot-ui's theme colours;
-- shows the game's declared buttons through dot-ui's `DotTouchButtons`, mirrored for a left-handed player, and holds each button's command bit on the sampler;
+- draws the stick (and a faint resting stick before the first touch) from GameSpice UI's theme colours;
+- shows the game's declared buttons through GameSpice UI's `DotTouchButtons`, mirrored for a left-handed player, and holds each button's command bit on the sampler;
 - adds gyro look, aim assist and auto-fire when the rules and the player's prefs allow them.
 
 A game declares buttons and adds the node. It does not draw, track fingers or reimplement the sampler.
@@ -48,7 +48,7 @@ Set `paused` while a menu, chat or console has the screen: the overlay hides, li
 
 ## The server's rules
 
-`DotMobileRules` holds what the server allows. `bind_cvars(add)` registers the cvars on a server; `follow_cvars(source)` follows the replicated values on a client (the same pattern as dot-player's view rules). Every setter clamps; `set_cvar` refuses a value it cannot read.
+`DotMobileRules` holds what the server allows. `bind_cvars(add)` registers the cvars on a server; `follow_cvars(source)` follows the replicated values on a client (the same pattern as GameSpice Player's view rules). Every setter clamps; `set_cvar` refuses a value it cannot read.
 
 | Cvar | Default | Meaning |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ A game may change a default before `bind_cvars` (for example `rules.autofire = D
 
 Client-side, applied before the command is sampled: `DotMobileAimAssist.step` turns the sampler's yaw and pitch a little towards the living enemy nearest the crosshair inside a cone (7 degrees, 80 metres by default). The simulation, the hit registration and the lag compensation see an ordinary player who aimed.
 
-It runs only while the player is moving or looking (a finger on the stick or the look side, or the gyro turning), so it never aims for a player who is not touching the screen. The turn is capped at `strength * rate * delta` and fades towards the cone's edge, so it never snaps. The game hands in the targets; dot-mobile knows nothing about teams or visibility.
+It runs only while the player is moving or looking (a finger on the stick or the look side, or the gyro turning), so it never aims for a player who is not touching the screen. The turn is capped at `strength * rate * delta` and fades towards the cone's edge, so it never snaps. The game hands in the targets; GameSpice Mobile knows nothing about teams or visibility.
 
 ## Auto-fire
 
@@ -82,11 +82,11 @@ Keyboard and mouse players are unaffected unless the server sets `sv_autofire_de
 
 ## Gyro look
 
-`DotMobileGyro` reads DeviceMotion's `rotationRate` on the web through dot-core's `DotWeb` (no eval, no page script). iOS only grants motion from a user gesture, so `start()` arms a one-shot `touchend` listener and asks inside it. Off the web, without a sensor, or when refused, every call is a no-op and the state says why.
+`DotMobileGyro` reads DeviceMotion's `rotationRate` on the web through GameSpice Core's `DotWeb` (no eval, no page script). iOS only grants motion from a user gesture, so `start()` arms a one-shot `touchend` listener and asks inside it. Off the web, without a sensor, or when refused, every call is a no-op and the state says why.
 
 Rates are mapped to yaw and pitch by the screen orientation and integrated between events, with a gap capped at 0.1 s so a backgrounded tab does not lurch. The mapping is not verified on every phone; a player can invert pitch.
 
-Every callback is released in `stop()`: dot-core keeps them in a static list, and one left there aborts at exit.
+Every callback is released in `stop()`: GameSpice Core keeps them in a static list, and one left there aborts at exit.
 
 ## Deliberately not here
 

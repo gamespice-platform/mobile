@@ -2,8 +2,8 @@
 
 Touch controls for first-person Godot 4 games: a drawn virtual stick, drag-to-look, game-declared buttons, optional gyro look on the web, and server-controlled aim assist and auto-fire.
 
-- Drives dot-player-controller's `DotFpsTouchSampler`; the game keeps its own input pipeline.
-- Code only: drawn with `_draw` and dot-ui's theme colours, no textures.
+- Drives GameSpice Player Controller's `DotFpsTouchSampler`; the game keeps its own input pipeline.
+- Code only: drawn with `_draw` and GameSpice UI's theme colours, no textures.
 - Every option is bounded by replicated server cvars (`sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*`).
 - Aim assist and auto-fire act on look input and the fire button before the command, so simulation, hit registration and lag compensation are untouched.
 

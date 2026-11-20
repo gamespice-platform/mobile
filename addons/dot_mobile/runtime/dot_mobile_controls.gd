@@ -32,7 +32,7 @@ var live_fn: Callable = Callable()
 ## (Vector2 viewport position) -> bool: true leaves that touch alone (the game's own menu button, say).
 var ignore_fn: Callable = Callable()
 
-## The dot-ui buttons, mirrored for a left-handed player.
+## The GameSpice UI buttons, mirrored for a left-handed player.
 var buttons: DotMobileButtons = null
 var sampler: DotFpsSampler = null
 
@@ -64,7 +64,7 @@ var _move_now: Vector2 = Vector2.ZERO
 var _look_finger: int = -1
 
 
-## Hands over the game's sampler and its buttons: dot-ui's dictionaries (id, label, offset, radius) plus an optional
+## Hands over the game's sampler and its buttons: GameSpice UI's dictionaries (id, label, offset, radius) plus an optional
 ## "hold": a DotFpsCommand bit the overlay holds on the sampler while the button (or auto-fire, for [constant FIRE]) is down.
 func setup(p_sampler: DotFpsSampler, layout: Array[Dictionary]) -> void:
 	# Another sampler (offline and online play each keep one): the old one gets its fingers, bits and filter back.

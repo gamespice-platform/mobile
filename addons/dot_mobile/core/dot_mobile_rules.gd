@@ -191,7 +191,7 @@ func cvar_specs() -> Array[Dictionary]:
 
 
 ## Registers the cvars through [param add] (a server module's `add_cvar`, shaped `(name, default, description,
-## flags) -> cvar`) and keeps these rules in step. Pass FLAG_REPLICATED. Duck-typed: dot-server is not a dependency.
+## flags) -> cvar`) and keeps these rules in step. Pass FLAG_REPLICATED. Duck-typed: GameSpice Server is not a dependency.
 func bind_cvars(add: Callable, flags: int = 0) -> Array:
 	var made: Array = []
 	for spec in cvar_specs():
