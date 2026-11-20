@@ -1,4 +1,4 @@
-[![Mobile - GameSpice addon](docs/banner.png)](https://moddingcommunity.com/a/288-dot-mobile)
+[![Mobile - GameSpice addon](docs/banner.png)](https://moddingcommunity.com/a/128-gs-mobile)
 
 Touch controls for first-person Godot 4 games: a drawn virtual stick, drag-to-look, game-declared buttons, optional gyro look on the web, and server-controlled aim assist and auto-fire.
 
