@@ -1,7 +1,7 @@
-class_name DotMobilePrefs
+class_name GSMobilePrefs
 extends RefCounted
 
-## A touch player's own choices. Plain values with no rules: [method DotMobileRules.resolve] bounds them by what the server allows.
+## A touch player's own choices. Plain values with no rules: [method GSMobileRules.resolve] bounds them by what the server allows.
 ## The game stores them where it stores settings ([method to_dict] / [method from_dict]); nothing here touches a disk.
 
 const TOUCH_AUTO := -1
@@ -25,8 +25,8 @@ var aim_assist: bool = false
 var autofire: bool = true
 
 
-func copy() -> DotMobilePrefs:
-	var out := DotMobilePrefs.new()
+func copy() -> GSMobilePrefs:
+	var out := GSMobilePrefs.new()
 	out.from_dict(to_dict())
 	return out
 
@@ -45,7 +45,7 @@ func from_dict(data: Dictionary) -> void:
 	stick = _flag(data, "stick", stick)
 	drag = _flag(data, "drag", drag)
 	gyro = _flag(data, "gyro", gyro)
-	look_sensitivity = clampf(_num(data, "look_sensitivity", look_sensitivity), DotMobileRules.SENS_FLOOR, DotMobileRules.SENS_CEILING)
+	look_sensitivity = clampf(_num(data, "look_sensitivity", look_sensitivity), GSMobileRules.SENS_FLOOR, GSMobileRules.SENS_CEILING)
 	gyro_sensitivity = clampf(_num(data, "gyro_sensitivity", gyro_sensitivity), 0.1, 4.0)
 	gyro_invert_y = _flag(data, "gyro_invert_y", gyro_invert_y)
 	left_handed = _flag(data, "left_handed", left_handed)

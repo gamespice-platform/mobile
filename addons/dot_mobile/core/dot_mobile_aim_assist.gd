@@ -1,4 +1,4 @@
-class_name DotMobileAimAssist
+class_name GSMobileAimAssist
 extends RefCounted
 
 ## Turns a touch player's view a little towards the nearest enemy inside a cone, while they are moving or looking.
@@ -16,7 +16,7 @@ var max_range: float = 80.0
 var last_target: int = -1
 
 
-## The unit forward vector of a view at [param yaw] / [param pitch] degrees (DotFpsSampler's convention).
+## The unit forward vector of a view at [param yaw] / [param pitch] degrees (GSFpsSampler's convention).
 static func direction(yaw: float, pitch: float) -> Vector3:
 	var y := deg_to_rad(yaw)
 	var p := deg_to_rad(pitch)

@@ -2,11 +2,11 @@
 
 ## What it is
 
-`DotMobileControls` is one `Control` a first-person game adds over its HUD. It shows on a touch device (`DotPlatform.has_touch()`, or the player's override) when the server allows it, and then:
+`GSMobileControls` is one `Control` a first-person game adds over its HUD. It shows on a touch device (`GSPlatform.has_touch()`, or the player's override) when the server allows it, and then:
 
-- forwards each touch to the game's `DotFpsTouchSampler`: left half moves (a stick planted where the thumb lands), right half looks;
+- forwards each touch to the game's `GSFpsTouchSampler`: left half moves (a stick planted where the thumb lands), right half looks;
 - draws the stick (and a faint resting stick before the first touch) from GameSpice UI's theme colours;
-- shows the game's declared buttons through GameSpice UI's `DotTouchButtons`, mirrored for a left-handed player, and holds each button's command bit on the sampler;
+- shows the game's declared buttons through GameSpice UI's `GSTouchButtons`, mirrored for a left-handed player, and holds each button's command bit on the sampler;
 - adds gyro look, aim assist and auto-fire when the rules and the player's prefs allow them.
 
 A game declares buttons and adds the node. It does not draw, track fingers or reimplement the sampler.
@@ -14,13 +14,13 @@ A game declares buttons and adds the node. It does not draw, track fingers or re
 ## Wiring a game
 
 ```gdscript
-var controls := DotMobileControls.new()
+var controls := GSMobileControls.new()
 controls.rules = mobile_rules                 # followed from the server, see below
 controls.setup(sampler, [
 	{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0},
-	{"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": DotFpsCommand.BUTTON_JUMP},
+	{"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": GSFpsCommand.BUTTON_JUMP},
 ])
-controls.crosshair_fn = crosshair_kind        # () -> DotMobileAutoFire.TARGET_*
+controls.crosshair_fn = crosshair_kind        # () -> GSMobileAutoFire.TARGET_*
 controls.targets_fn = visible_enemy_points    # () -> PackedVector3Array, for aim assist
 controls.eye_fn = eye_position                # () -> Vector3
 controls.live_fn = is_alive_and_playing       # () -> bool
@@ -48,7 +48,7 @@ Set `paused` while a menu, chat or console has the screen: the overlay hides, li
 
 ## The server's rules
 
-`DotMobileRules` holds what the server allows. `bind_cvars(add)` registers the cvars on a server; `follow_cvars(source)` follows the replicated values on a client (the same pattern as GameSpice Player's view rules). Every setter clamps; `set_cvar` refuses a value it cannot read.
+`GSMobileRules` holds what the server allows. `bind_cvars(add)` registers the cvars on a server; `follow_cvars(source)` follows the replicated values on a client (the same pattern as GameSpice Player's view rules). Every setter clamps; `set_cvar` refuses a value it cannot read.
 
 | Cvar | Default | Meaning |
 | --- | --- | --- |
@@ -62,27 +62,27 @@ Set `paused` while a menu, chat or console has the screen: the overlay hides, li
 | `sv_autofire` | 0 | 0 off, 1 allowed (player may turn it off), 2 forced |
 | `sv_autofire_desktop` | 0 | keyboard and mouse players get auto-fire too |
 
-A game may change a default before `bind_cvars` (for example `rules.autofire = DotMobileRules.ALLOWED`).
+A game may change a default before `bind_cvars` (for example `rules.autofire = GSMobileRules.ALLOWED`).
 
 `resolve(prefs, touch)` returns the player's prefs as the server allows them; the overlay keeps it in `effective` and re-resolves whenever the rules change.
 
 ## Aim assist
 
-Client-side, applied before the command is sampled: `DotMobileAimAssist.step` turns the sampler's yaw and pitch a little towards the living enemy nearest the crosshair inside a cone (7 degrees, 80 metres by default). The simulation, the hit registration and the lag compensation see an ordinary player who aimed.
+Client-side, applied before the command is sampled: `GSMobileAimAssist.step` turns the sampler's yaw and pitch a little towards the living enemy nearest the crosshair inside a cone (7 degrees, 80 metres by default). The simulation, the hit registration and the lag compensation see an ordinary player who aimed.
 
 It runs only while the player is moving or looking (a finger on the stick or the look side, or the gyro turning), so it never aims for a player who is not touching the screen. The turn is capped at `strength * rate * delta` and fades towards the cone's edge, so it never snaps. The game hands in the targets; GameSpice Mobile knows nothing about teams or visibility.
 
 ## Auto-fire
 
-`DotMobileAutoFire` decides only when the fire button is down. The game tells it what is under the crosshair each frame (`crosshair_fn`): an enemy, a friend (a teammate, a corpse, anything that must not be shot) or nothing. It fires after a short reaction time on an enemy and releases at once otherwise. A semi-automatic weapon (`autofire.automatic = false`) gets separate presses.
+`GSMobileAutoFire` decides only when the fire button is down. The game tells it what is under the crosshair each frame (`crosshair_fn`): an enemy, a friend (a teammate, a corpse, anything that must not be shot) or nothing. It fires after a short reaction time on an enemy and releases at once otherwise. A semi-automatic weapon (`autofire.automatic = false`) gets separate presses.
 
-The press goes through the same path as a finger on Fire, so fire modes, cooldowns and ammunition stay the simulation's. A game without a crosshair query uses `DotMobileAutoFire.ray_target` with its hitscan's eye and aim: one ray, the collider handed to the game's classifier. Both auto-fire and aim assist are well under 0.1 ms a frame.
+The press goes through the same path as a finger on Fire, so fire modes, cooldowns and ammunition stay the simulation's. A game without a crosshair query uses `GSMobileAutoFire.ray_target` with its hitscan's eye and aim: one ray, the collider handed to the game's classifier. Both auto-fire and aim assist are well under 0.1 ms a frame.
 
 Keyboard and mouse players are unaffected unless the server sets `sv_autofire_desktop`; the overlay then stays invisible but auto-fire still runs.
 
 ## Gyro look
 
-`DotMobileGyro` reads DeviceMotion's `rotationRate` on the web through GameSpice Core's `DotWeb` (no eval, no page script). iOS only grants motion from a user gesture, so `start()` arms a one-shot `touchend` listener and asks inside it. Off the web, without a sensor, or when refused, every call is a no-op and the state says why.
+`GSMobileGyro` reads DeviceMotion's `rotationRate` on the web through GameSpice Core's `GSWeb` (no eval, no page script). iOS only grants motion from a user gesture, so `start()` arms a one-shot `touchend` listener and asks inside it. Off the web, without a sensor, or when refused, every call is a no-op and the state says why.
 
 Rates are mapped to yaw and pitch by the screen orientation and integrated between events, with a gap capped at 0.1 s so a backgrounded tab does not lurch. The mapping is not verified on every phone; a player can invert pitch.
 
@@ -90,4 +90,4 @@ Every callback is released in `stop()`: GameSpice Core keeps them in a static li
 
 ## Deliberately not here
 
-A settings screen (the game's own menu shows `DotMobilePrefs`), textures or icons, haptics, and anything that changes the simulation.
+A settings screen (the game's own menu shows `GSMobilePrefs`), textures or icons, haptics, and anything that changes the simulation.

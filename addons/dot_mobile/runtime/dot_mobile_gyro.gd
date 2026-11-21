@@ -1,7 +1,7 @@
-class_name DotMobileGyro
+class_name GSMobileGyro
 extends RefCounted
 
-## The phone's own rotation as look input, on the web only, through GameSpice Core's [DotWeb] (no page script, no eval).
+## The phone's own rotation as look input, on the web only, through GameSpice Core's [GSWeb] (no page script, no eval).
 ## iOS asks the player first and only from a user gesture, so [method start] arms a one-shot listener on the next
 ## touch and asks inside it. Off the web, with no motion sensor or when refused, every call is a no-op.
 
@@ -49,18 +49,18 @@ func is_running() -> bool:
 func start() -> void:
 	if state in [State.RUNNING, State.WAITING_FOR_GESTURE, State.ASKING, State.DENIED, State.UNSUPPORTED]:
 		return
-	if not DotWeb.available():
+	if not GSWeb.available():
 		state = State.UNSUPPORTED
 		return
-	var motion_event: Variant = DotWeb.get_global("DeviceMotionEvent")
+	var motion_event: Variant = GSWeb.get_global("DeviceMotionEvent")
 	if motion_event == null:
 		state = State.UNSUPPORTED
 		return
 	if motion_event.requestPermission == null:
 		_listen()
 		return
-	var doc: Variant = DotWeb.get_global("document")
-	_gesture_cb = DotWeb.create_callback(_CB_GESTURE, _on_gesture)
+	var doc: Variant = GSWeb.get_global("document")
+	_gesture_cb = GSWeb.create_callback(_CB_GESTURE, _on_gesture)
 	if doc == null or _gesture_cb == null:
 		state = State.UNSUPPORTED
 		return
@@ -70,14 +70,14 @@ func start() -> void:
 
 ## Stops listening and releases every callback; the player can start it again.
 func stop() -> void:
-	var win: Variant = DotWeb.get_global("window")
-	var doc: Variant = DotWeb.get_global("document")
+	var win: Variant = GSWeb.get_global("window")
+	var doc: Variant = GSWeb.get_global("document")
 	if win != null and _motion_cb != null:
 		win.removeEventListener("devicemotion", _motion_cb)
 	if doc != null and _gesture_cb != null:
 		doc.removeEventListener("touchend", _gesture_cb)
 	for key in _CALLBACKS:
-		DotWeb.release_callback(key)
+		GSWeb.release_callback(key)
 	_motion_cb = null
 	_gesture_cb = null
 	_pending = Vector2.ZERO
@@ -100,32 +100,32 @@ func feed(rates: Vector2, seconds: float) -> void:
 
 
 func _listen() -> void:
-	var win: Variant = DotWeb.get_global("window")
-	_motion_cb = DotWeb.create_callback(_CB_MOTION, _on_motion)
+	var win: Variant = GSWeb.get_global("window")
+	_motion_cb = GSWeb.create_callback(_CB_MOTION, _on_motion)
 	if win == null or _motion_cb == null:
 		state = State.UNSUPPORTED
 		return
 	win.addEventListener("devicemotion", _motion_cb)
 	_last_us = 0
 	state = State.RUNNING
-	DotLog.info(CHANNEL, "gyro look running")
+	GSLog.info(CHANNEL, "gyro look running")
 
 
 func _on_gesture(_args: Array) -> void:
 	if state != State.WAITING_FOR_GESTURE:
 		return
-	var doc: Variant = DotWeb.get_global("document")
+	var doc: Variant = GSWeb.get_global("document")
 	if doc != null and _gesture_cb != null:
 		doc.removeEventListener("touchend", _gesture_cb)
-	var motion_event: Variant = DotWeb.get_global("DeviceMotionEvent")
+	var motion_event: Variant = GSWeb.get_global("DeviceMotionEvent")
 	if motion_event == null:
 		state = State.UNSUPPORTED
 		return
 	state = State.ASKING
 	# Called synchronously inside the touchend, which is the only place iOS accepts the request from.
 	var asked: Variant = motion_event.requestPermission()
-	var granted: Variant = DotWeb.create_callback(_CB_GRANTED, _on_answer)
-	var refused: Variant = DotWeb.create_callback(_CB_REFUSED, _on_refused)
+	var granted: Variant = GSWeb.create_callback(_CB_GRANTED, _on_answer)
+	var refused: Variant = GSWeb.create_callback(_CB_REFUSED, _on_refused)
 	if asked == null or granted == null:
 		state = State.UNSUPPORTED
 		return
@@ -138,7 +138,7 @@ func _on_answer(args: Array) -> void:
 		_listen()
 	else:
 		state = State.DENIED
-		DotLog.info(CHANNEL, "gyro look refused by the player", {"answer": answer})
+		GSLog.info(CHANNEL, "gyro look refused by the player", {"answer": answer})
 
 
 func _on_refused(_args: Array) -> void:
@@ -165,10 +165,10 @@ static func _read(value: Variant) -> float:
 
 
 static func _screen_angle() -> int:
-	var screen: Variant = DotWeb.get_global("screen")
+	var screen: Variant = GSWeb.get_global("screen")
 	if screen != null and screen.orientation != null:
 		return int(_read(screen.orientation.angle))
-	var win: Variant = DotWeb.get_global("window")
+	var win: Variant = GSWeb.get_global("window")
 	return int(_read(win.orientation)) if win != null else 0
 
 

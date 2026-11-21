@@ -1,9 +1,9 @@
-class_name DotMobileRules
+class_name GSMobileRules
 extends RefCounted
 
 ## What a server lets touch players (and, for auto-fire, everybody) use: replicated cvars, each clamped here.
 ## The server registers them with [method bind_cvars], a client follows them with [method follow_cvars] and asks
-## [method resolve] what its own [DotMobilePrefs] come to. Presentation and input only: the simulation never reads these.
+## [method resolve] what its own [GSMobilePrefs] come to. Presentation and input only: the simulation never reads these.
 
 ## Emitted when any rule changes, from a cvar or by hand.
 signal changed
@@ -93,7 +93,7 @@ var aim_assist: int = OFF:
 			aim_assist = value
 			changed.emit()
 
-## 0 no pull to 1 the strongest; scales [DotMobileAimAssist]'s turn rate.
+## 0 no pull to 1 the strongest; scales [GSMobileAimAssist]'s turn rate.
 var aim_strength: float = 0.35:
 	set(value):
 		value = clampf(value, 0.0, 1.0)
@@ -118,11 +118,11 @@ var autofire_desktop: bool = false:
 
 
 ## Whether the overlay shows for a device: the server allows it and the device has touch (or the player forced it).
-func touch_active(prefs: DotMobilePrefs, has_touch: bool) -> bool:
+func touch_active(prefs: GSMobilePrefs, has_touch: bool) -> bool:
 	if not touch_enabled:
 		return false
-	if prefs != null and prefs.touch != DotMobilePrefs.TOUCH_AUTO:
-		return prefs.touch == DotMobilePrefs.TOUCH_ON
+	if prefs != null and prefs.touch != GSMobilePrefs.TOUCH_AUTO:
+		return prefs.touch == GSMobilePrefs.TOUCH_ON
 	return has_touch
 
 
@@ -135,22 +135,22 @@ func shows_button(id: StringName) -> bool:
 
 
 ## Whether aim assist runs for this player. Touch players only: a mouse needs no help.
-func aim_assist_on(prefs: DotMobilePrefs, touch: bool) -> bool:
+func aim_assist_on(prefs: GSMobilePrefs, touch: bool) -> bool:
 	if not touch or aim_assist == OFF or aim_strength <= 0.0:
 		return false
 	return aim_assist == FORCED or (prefs != null and prefs.aim_assist)
 
 
 ## Whether auto-fire runs for this player; a keyboard player only under [member autofire_desktop].
-func autofire_on(prefs: DotMobilePrefs, touch: bool) -> bool:
+func autofire_on(prefs: GSMobilePrefs, touch: bool) -> bool:
 	if autofire == OFF or (not touch and not autofire_desktop):
 		return false
 	return autofire == FORCED or (prefs != null and prefs.autofire)
 
 
 ## [param prefs] as this server allows them, for a [param touch] player: a copy, the original is untouched.
-func resolve(prefs: DotMobilePrefs, touch: bool) -> DotMobilePrefs:
-	var out := prefs.copy() if prefs != null else DotMobilePrefs.new()
+func resolve(prefs: GSMobilePrefs, touch: bool) -> GSMobilePrefs:
+	var out := prefs.copy() if prefs != null else GSMobilePrefs.new()
 	out.stick = out.stick and allows_scheme(SCHEME_STICK)
 	out.drag = out.drag and allows_scheme(SCHEME_DRAG)
 	out.gyro = out.gyro and allows_scheme(SCHEME_GYRO)
@@ -258,7 +258,7 @@ func set_cvar(cvar_name: String, value: String) -> bool:
 			return true
 		CVAR_TOUCH, CVAR_LEFT_HANDED, CVAR_AIM_ASSIST, CVAR_AUTOFIRE, CVAR_AUTOFIRE_DESKTOP:
 			if not text.is_valid_int():
-				DotLog.debug(CHANNEL, "refused a value", {"cvar": cvar_name, "value": value})
+				GSLog.debug(CHANNEL, "refused a value", {"cvar": cvar_name, "value": value})
 				return false
 			var n := text.to_int()
 			if cvar_name == CVAR_TOUCH:

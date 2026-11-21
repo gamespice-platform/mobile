@@ -1,4 +1,4 @@
-class_name DotMobileAutoFire
+class_name GSMobileAutoFire
 extends RefCounted
 
 ## Presses fire while the crosshair rests on an enemy. It only decides when the fire button is down; the game sends

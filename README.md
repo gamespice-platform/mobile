@@ -2,7 +2,7 @@
 
 Touch controls for first-person Godot 4 games: a drawn virtual stick, drag-to-look, game-declared buttons, optional gyro look on the web, and server-controlled aim assist and auto-fire.
 
-- Drives GameSpice Player Controller's `DotFpsTouchSampler`; the game keeps its own input pipeline.
+- Drives GameSpice Player Controller's `GSFpsTouchSampler`; the game keeps its own input pipeline.
 - Code only: drawn with `_draw` and GameSpice UI's theme colours, no textures.
 - Every option is bounded by replicated server cvars (`sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*`).
 - Aim assist and auto-fire act on look input and the fire button before the command, so simulation, hit registration and lag compensation are untouched.
@@ -14,7 +14,7 @@ Copy `addons/dot_mobile/` into your project next to `dot_core`, `dot_ui` and `do
 ## Use
 
 ```gdscript
-var controls := DotMobileControls.new()
+var controls := GSMobileControls.new()
 controls.setup(sampler, [{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0}])
 controls.crosshair_fn = my_crosshair_kind
 hud.add_child(controls)

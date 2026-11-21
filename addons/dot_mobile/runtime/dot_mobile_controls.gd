@@ -1,9 +1,9 @@
-class_name DotMobileControls
-extends DotHudPiece
+class_name GSMobileControls
+extends GSHudPiece
 
-## The touch overlay a first-person game adds over its HUD: a drawn stick, drag-to-look, the game's declared buttons, gyro look, aim assist and auto-fire, each bounded by [member rules]. It drives the game's own [DotFpsTouchSampler] (forwarding touches, holding command bits) and replaces nothing in it.
-## Wiring: [code]var controls := DotMobileControls.new()[/code]; [code]controls.rules = my_rules[/code] (followed from the server's replicated cvars); [code]controls.setup(sampler, [{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0}, {"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": DotFpsCommand.BUTTON_JUMP}])[/code];
-## [code]controls.crosshair_fn = my_crosshair_kind[/code] (() -> DotMobileAutoFire.TARGET_*); [code]hud.add_child(controls)[/code]; and in the game's own input forwarding, [code]if not controls.takes(event): sampler.handle_event(event)[/code].
+## The touch overlay a first-person game adds over its HUD: a drawn stick, drag-to-look, the game's declared buttons, gyro look, aim assist and auto-fire, each bounded by [member rules]. It drives the game's own [GSFpsTouchSampler] (forwarding touches, holding command bits) and replaces nothing in it.
+## Wiring: [code]var controls := GSMobileControls.new()[/code]; [code]controls.rules = my_rules[/code] (followed from the server's replicated cvars); [code]controls.setup(sampler, [{"id": &"fire", "label": "FIRE", "offset": Vector2(86, 150), "radius": 52.0}, {"id": &"jump", "label": "JUMP", "offset": Vector2(200, 130), "radius": 42.0, "hold": GSFpsCommand.BUTTON_JUMP}])[/code];
+## [code]controls.crosshair_fn = my_crosshair_kind[/code] (() -> GSMobileAutoFire.TARGET_*); [code]hud.add_child(controls)[/code]; and in the game's own input forwarding, [code]if not controls.takes(event): sampler.handle_event(event)[/code].
 
 ## A declared button went down or up (after the server's filter). One-shot actions hang off these.
 signal button_pressed(id: StringName)
@@ -13,19 +13,19 @@ signal button_released(id: StringName)
 const FIRE := &"fire"
 
 ## What the server allows. Replace before adding to the tree, or call [method refresh] after.
-var rules: DotMobileRules = DotMobileRules.new()
+var rules: GSMobileRules = GSMobileRules.new()
 ## What the player chose. Call [method refresh] after changing it.
-var prefs: DotMobilePrefs = DotMobilePrefs.new()
+var prefs: GSMobilePrefs = GSMobilePrefs.new()
 
-var aim_assist: DotMobileAimAssist = DotMobileAimAssist.new()
-var autofire: DotMobileAutoFire = DotMobileAutoFire.new()
-var gyro: DotMobileGyro = DotMobileGyro.new()
+var aim_assist: GSMobileAimAssist = GSMobileAimAssist.new()
+var autofire: GSMobileAutoFire = GSMobileAutoFire.new()
+var gyro: GSMobileGyro = GSMobileGyro.new()
 
 ## () -> PackedVector3Array: aim points of the living enemies this player can see. Leave unset for no aim assist.
 var targets_fn: Callable = Callable()
 ## () -> Vector3: the eye aim assist measures from.
 var eye_fn: Callable = Callable()
-## () -> int, a [constant DotMobileAutoFire.TARGET_NONE]-style kind from the game's own crosshair ray. Unset: no auto-fire.
+## () -> int, a [constant GSMobileAutoFire.TARGET_NONE]-style kind from the game's own crosshair ray. Unset: no auto-fire.
 var crosshair_fn: Callable = Callable()
 ## () -> bool: false while the player is dead, spectating or in a menu; gyro, aim assist and auto-fire pause.
 var live_fn: Callable = Callable()
@@ -33,8 +33,8 @@ var live_fn: Callable = Callable()
 var ignore_fn: Callable = Callable()
 
 ## The GameSpice UI buttons, mirrored for a left-handed player.
-var buttons: DotMobileButtons = null
-var sampler: DotFpsSampler = null
+var buttons: GSMobileButtons = null
+var sampler: GSFpsSampler = null
 
 ## Whether the overlay is showing and taking touches: a touch device (or the player's override), the server allows it
 ## and it is not [member paused].
@@ -48,9 +48,9 @@ var paused: bool = false:
 			if is_inside_tree():
 				refresh()
 ## [member prefs] as [member rules] allow them, from the last [method refresh].
-var effective: DotMobilePrefs = DotMobilePrefs.new()
+var effective: GSMobilePrefs = GSMobilePrefs.new()
 
-var _touch_sampler: DotFpsTouchSampler = null
+var _touch_sampler: GSFpsTouchSampler = null
 var _layout: Array[Dictionary] = []
 var _hold_bits: Dictionary = {}
 var _forwarding: bool = false
@@ -65,8 +65,8 @@ var _look_finger: int = -1
 
 
 ## Hands over the game's sampler and its buttons: GameSpice UI's dictionaries (id, label, offset, radius) plus an optional
-## "hold": a DotFpsCommand bit the overlay holds on the sampler while the button (or auto-fire, for [constant FIRE]) is down.
-func setup(p_sampler: DotFpsSampler, layout: Array[Dictionary]) -> void:
+## "hold": a GSFpsCommand bit the overlay holds on the sampler while the button (or auto-fire, for [constant FIRE]) is down.
+func setup(p_sampler: GSFpsSampler, layout: Array[Dictionary]) -> void:
 	# Another sampler (offline and online play each keep one): the old one gets its fingers, bits and filter back.
 	if sampler != null and p_sampler != sampler:
 		_drop_fingers()
@@ -78,7 +78,7 @@ func setup(p_sampler: DotFpsSampler, layout: Array[Dictionary]) -> void:
 			ignore_fn = Callable()
 		_game_ignore = Callable()
 	sampler = p_sampler
-	_touch_sampler = p_sampler as DotFpsTouchSampler
+	_touch_sampler = p_sampler as GSFpsTouchSampler
 	# The game's own filter (a menu button, say) moves to the overlay, which now decides which touches reach the sampler.
 	if _touch_sampler != null and _touch_sampler.ignore_fn != _sampler_ignores:
 		_game_ignore = _touch_sampler.ignore_fn
@@ -96,7 +96,7 @@ func setup(p_sampler: DotFpsSampler, layout: Array[Dictionary]) -> void:
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if buttons == null:
-		buttons = DotMobileButtons.new()
+		buttons = GSMobileButtons.new()
 		buttons.name = "Buttons"
 		buttons.only_on_touch = false
 		buttons.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -126,7 +126,7 @@ func refresh() -> void:
 		rules.changed.connect(_queue_refresh)
 	var was_touch := touch
 	var was_mirrored := effective.left_handed
-	touch = rules.touch_active(prefs, DotPlatform.has_touch()) and _touch_sampler != null and not paused
+	touch = rules.touch_active(prefs, GSPlatform.has_touch()) and _touch_sampler != null and not paused
 	effective = rules.resolve(prefs, touch)
 	visible = touch
 	if buttons != null:
@@ -145,7 +145,7 @@ func refresh() -> void:
 		_touch_sampler.ignore_fn = _sampler_ignores if touch else _game_ignore
 	if touch and effective.gyro:
 		gyro.start()
-	elif gyro.state != DotMobileGyro.State.OFF:
+	elif gyro.state != GSMobileGyro.State.OFF:
 		gyro.stop()
 	if not effective.autofire:
 		_set_autofire(false)
@@ -251,7 +251,7 @@ func _process(delta: float) -> void:
 		var eye: Vector3 = eye_fn.call()
 		var aimed := aim_assist.step(eye, sampler.yaw, sampler.pitch, targets, rules.aim_strength, delta)
 		_turn(aimed.x - sampler.yaw, aimed.y - sampler.pitch)
-	var kind := DotMobileAutoFire.TARGET_NONE
+	var kind := GSMobileAutoFire.TARGET_NONE
 	var armed := effective.autofire and live and crosshair_fn.is_valid()
 	if armed:
 		kind = int(crosshair_fn.call())

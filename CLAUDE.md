@@ -1,6 +1,6 @@
 # GameSpice Mobile
 
-Touch controls for a first-person game: a drawn stick, drag-to-look, the game's declared buttons, optional gyro look, and opt-in aim assist and auto-fire, each bounded by replicated server cvars. It drives the game's own `DotFpsTouchSampler`; it replaces nothing in it.
+Touch controls for a first-person game: a drawn stick, drag-to-look, the game's declared buttons, optional gyro look, and opt-in aim assist and auto-fire, each bounded by replicated server cvars. It drives the game's own `GSFpsTouchSampler`; it replaces nothing in it.
 
 Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is specific to mobile.
 
@@ -16,13 +16,13 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is sp
 
 | Path | What |
 | --- | --- |
-| `core/dot_mobile_rules.gd` | `DotMobileRules`: what the server allows; the `sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*` cvars; `resolve(prefs, touch)` |
-| `core/dot_mobile_prefs.gd` | `DotMobilePrefs`: what the player chose; `to_dict` / `from_dict` |
-| `core/dot_mobile_aim_assist.gd` | `DotMobileAimAssist`: cone pick and a capped turn towards it, in the sampler's degrees |
-| `core/dot_mobile_autofire.gd` | `DotMobileAutoFire`: when the fire button is down; `ray_target` for a game with no crosshair query |
-| `runtime/dot_mobile_gyro.gd` | `DotMobileGyro`: DeviceMotion through `DotWeb`, iOS permission from a gesture |
-| `runtime/dot_mobile_buttons.gd` | `DotMobileButtons`: GameSpice UI's `DotTouchButtons`, mirrorable |
-| `runtime/dot_mobile_controls.gd` | `DotMobileControls`: the node a game adds |
+| `core/dot_mobile_rules.gd` | `GSMobileRules`: what the server allows; the `sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*` cvars; `resolve(prefs, touch)` |
+| `core/dot_mobile_prefs.gd` | `GSMobilePrefs`: what the player chose; `to_dict` / `from_dict` |
+| `core/dot_mobile_aim_assist.gd` | `GSMobileAimAssist`: cone pick and a capped turn towards it, in the sampler's degrees |
+| `core/dot_mobile_autofire.gd` | `GSMobileAutoFire`: when the fire button is down; `ray_target` for a game with no crosshair query |
+| `runtime/dot_mobile_gyro.gd` | `GSMobileGyro`: DeviceMotion through `GSWeb`, iOS permission from a gesture |
+| `runtime/dot_mobile_buttons.gd` | `GSMobileButtons`: GameSpice UI's `GSTouchButtons`, mirrorable |
+| `runtime/dot_mobile_controls.gd` | `GSMobileControls`: the node a game adds |
 | `examples/mobile_selftest.tscn` | the suite |
 
 ## Running and testing
@@ -35,5 +35,5 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is sp
 - Aim assist and auto-fire change only the sampler's yaw and pitch and a held button bit, never the simulation, hit registration or lag compensation. [design](docs/design.md#aim-assist)
 - Auto-fire presses the same bit a finger on Fire sets, so fire modes and cooldowns stay the simulation's. The game's crosshair kind must say FRIEND for teammates and the dead. [design](docs/design.md#auto-fire)
 - Everything off-default is the server's call: aim assist is OFF in the addon, auto-fire is OFF in the addon (a game may default it on). [design](docs/design.md#the-servers-rules)
-- `DotWeb` callbacks are released in `DotMobileGyro.stop()`; never leave a lambda in a static list. [design](docs/design.md#gyro-look)
-- `DotMobileControls` must not name its own class inside its script (it extends a script class).
+- `GSWeb` callbacks are released in `GSMobileGyro.stop()`; never leave a lambda in a static list. [design](docs/design.md#gyro-look)
+- `GSMobileControls` must not name its own class inside its script (it extends a script class).

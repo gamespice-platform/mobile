@@ -1,8 +1,8 @@
 extends RefCounted
 
-## GameSpice Mobile's API level. The rule for bumping it is on [DotAddonApi].
+## GameSpice Mobile's API level. The rule for bumping it is on [GSAddonApi].
 
-# 1: the first release: DotMobileRules, DotMobilePrefs, DotMobileAimAssist, DotMobileAutoFire, DotMobileGyro, DotMobileButtons, DotMobileControls.
+# 1: the first release: GSMobileRules, GSMobilePrefs, GSMobileAimAssist, GSMobileAutoFire, GSMobileGyro, GSMobileButtons, GSMobileControls.
 
 const LEVEL := 1
 
