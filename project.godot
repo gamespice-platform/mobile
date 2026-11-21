@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="dot-mobile"
+config/name="gs-mobile"
 config/description="Touch play for first-person games: an on-screen stick, drag and gyro look, declared buttons, aim assist and auto-fire, bounded by server cvars."
 run/main_scene="res://examples/mobile_selftest.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
@@ -23,7 +23,7 @@ window/size/viewport_height=900
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dot_mobile/plugin.cfg")
+enabled=PackedStringArray("res://addons/gs_mobile/plugin.cfg")
 
 [importer_defaults]
 

@@ -4,7 +4,7 @@ extends EditorPlugin
 ## Editor entry point for GameSpice Mobile. Registers inspector types only; no autoloads, a game adds the overlay itself.
 
 const _TYPES := [
-	["GSMobileControls", "Control", "res://addons/dot_mobile/runtime/dot_mobile_controls.gd"],
+	["GSMobileControls", "Control", "res://addons/gs_mobile/runtime/gs_mobile_controls.gd"],
 ]
 
 

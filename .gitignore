@@ -3,19 +3,19 @@
 /android/
 
 # Sibling repositories. For local development, symlink each:
-#   ln -s ../../dot-core/addons/dot_core addons/dot_core
+#   ln -s ../../gs-core/addons/gs_core addons/gs_core
 # and the same for the others. Consumers copy them into their own project.
-/addons/dot_core
-/addons/dot_ui
-/addons/dot_input
-/addons/dot_player_controller
-/addons/dot_profile
-/addons/dot_net
-/addons/dot_player
-/addons/dot_sim
-/addons/dot_bot
-/addons/dot_bot_record
-/addons/dot_sql
+/addons/gs_core
+/addons/gs_ui
+/addons/gs_input
+/addons/gs_player_controller
+/addons/gs_profile
+/addons/gs_net
+/addons/gs_player
+/addons/gs_sim
+/addons/gs_bot
+/addons/gs_bot_record
+/addons/gs_sql
 /addons/godot-sqlite
 
 # Exports

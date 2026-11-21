@@ -4,7 +4,7 @@ Touch controls for a first-person game: a drawn stick, drag-to-look, the game's 
 
 Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is specific to mobile.
 
-**The distributable is `addons/dot_mobile/`.** It requires dot-core, dot-ui and dot-player-controller (symlinked and gitignored for development). It is code only: everything is drawn with `_draw`, never a texture.
+**The distributable is `addons/gs_mobile/`.** It requires gs-core, gs-ui and gs-player-controller (symlinked and gitignored for development). It is code only: everything is drawn with `_draw`, never a texture.
 
 ## Read before
 
@@ -16,13 +16,13 @@ Read the family [CLAUDE.md](../../CLAUDE.md) first; this file is only what is sp
 
 | Path | What |
 | --- | --- |
-| `core/dot_mobile_rules.gd` | `GSMobileRules`: what the server allows; the `sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*` cvars; `resolve(prefs, touch)` |
-| `core/dot_mobile_prefs.gd` | `GSMobilePrefs`: what the player chose; `to_dict` / `from_dict` |
-| `core/dot_mobile_aim_assist.gd` | `GSMobileAimAssist`: cone pick and a capped turn towards it, in the sampler's degrees |
-| `core/dot_mobile_autofire.gd` | `GSMobileAutoFire`: when the fire button is down; `ray_target` for a game with no crosshair query |
-| `runtime/dot_mobile_gyro.gd` | `GSMobileGyro`: DeviceMotion through `GSWeb`, iOS permission from a gesture |
-| `runtime/dot_mobile_buttons.gd` | `GSMobileButtons`: GameSpice UI's `GSTouchButtons`, mirrorable |
-| `runtime/dot_mobile_controls.gd` | `GSMobileControls`: the node a game adds |
+| `core/gs_mobile_rules.gd` | `GSMobileRules`: what the server allows; the `sv_mobile_*`, `sv_aim_assist*`, `sv_autofire*` cvars; `resolve(prefs, touch)` |
+| `core/gs_mobile_prefs.gd` | `GSMobilePrefs`: what the player chose; `to_dict` / `from_dict` |
+| `core/gs_mobile_aim_assist.gd` | `GSMobileAimAssist`: cone pick and a capped turn towards it, in the sampler's degrees |
+| `core/gs_mobile_autofire.gd` | `GSMobileAutoFire`: when the fire button is down; `ray_target` for a game with no crosshair query |
+| `runtime/gs_mobile_gyro.gd` | `GSMobileGyro`: DeviceMotion through `GSWeb`, iOS permission from a gesture |
+| `runtime/gs_mobile_buttons.gd` | `GSMobileButtons`: GameSpice UI's `GSTouchButtons`, mirrorable |
+| `runtime/gs_mobile_controls.gd` | `GSMobileControls`: the node a game adds |
 | `examples/mobile_selftest.tscn` | the suite |
 
 ## Running and testing

@@ -9,7 +9,7 @@ Touch controls for first-person Godot 4 games: a drawn virtual stick, drag-to-lo
 
 ## Install
 
-Copy `addons/dot_mobile/` into your project next to `dot_core`, `dot_ui` and `dot_player_controller`, and enable the plugin.
+Copy `addons/gs_mobile/` into your project next to `gs_core`, `gs_ui` and `gs_player_controller`, and enable the plugin.
 
 ## Use
 

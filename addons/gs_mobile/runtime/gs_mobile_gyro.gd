@@ -9,10 +9,10 @@ const CHANNEL := "mobile.gyro"
 
 enum State { OFF, UNSUPPORTED, WAITING_FOR_GESTURE, ASKING, DENIED, RUNNING }
 
-const _CB_MOTION := "dot_mobile.gyro_motion"
-const _CB_GESTURE := "dot_mobile.gyro_gesture"
-const _CB_GRANTED := "dot_mobile.gyro_granted"
-const _CB_REFUSED := "dot_mobile.gyro_refused"
+const _CB_MOTION := "gs_mobile.gyro_motion"
+const _CB_GESTURE := "gs_mobile.gyro_gesture"
+const _CB_GRANTED := "gs_mobile.gyro_granted"
+const _CB_REFUSED := "gs_mobile.gyro_refused"
 const _CALLBACKS: Array[String] = [_CB_MOTION, _CB_GESTURE, _CB_GRANTED, _CB_REFUSED]
 
 ## A gap between two motion events longer than this (seconds) counts as this long: a backgrounded tab must not lurch.

@@ -1,6 +1,6 @@
 extends Node
 
-## Exercises dot-mobile with no phone, no browser and no server: the rules' clamping and cvars, the prefs a player
+## Exercises gs-mobile with no phone, no browser and no server: the rules' clamping and cvars, the prefs a player
 ## saves, aim-assist math, auto-fire gating and the overlay driving a real GSFpsTouchSampler with synthetic touches.
 ## Run: [code]godot --headless --path . res://examples/mobile_selftest.tscn[/code].
 
@@ -19,7 +19,7 @@ func _ready() -> void:
 
 
 func _run() -> void:
-	_line("dot-mobile self-test")
+	_line("gs-mobile self-test")
 	_test_rules_clamping()
 	_test_rules_cvars()
 	_test_prefs()
